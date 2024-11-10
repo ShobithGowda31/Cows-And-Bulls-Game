@@ -1,5 +1,5 @@
                      Cows and Bulls Game Web Implementation
-Project Overview :
+Project Overview : 
           > The Cows and Bulls game is a classic code-breaking game where players attempt to guess a secret 4-digit number.
           > Each digit must be unique, and the game provides feedback in terms of "bulls" (correct digit in the correct position) and "cows" (correct digit in an incorrect position).
           > The web-based implementation of the game is built using HTML, CSS, and JavaScript to provide an interactive user experience.

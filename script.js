@@ -10,7 +10,11 @@ function generateSecretNumber() {
 }
 
 const secretNumber = generateSecretNumber();
+console.log('Secret Number: ${SecretNumber}');
+let playerName = '';
 let attempts = 0;
+let previousGuesses = [];
+
 document.addEventListener('DOMContentLoaded', () => {
     const playerNameInput = document.getElementById('playerName');
     const guessInput = document.getElementById('guessInput');
@@ -19,21 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const previousGuessesList = document.getElementById('previousGuesses');
     const secretNumber = generateSecretNumber();
 
-    let playerName = '';
-    let attempts = 0;
-    let previousGuesses = [];
-
-    function generateSecretNumber() {
-        let digits = new Set();
-        while (digits.size < 4) {
-            const randomDigit = Math.floor(Math.random() * 10);
-            digits.add(randomDigit);
-        }
-        return Array.from(digits).join('');
-    }
-
     submitButton.addEventListener('click', () => {
-        // Capture player's name if not already set
         if (!playerName) {
             playerName = playerNameInput.value.trim();
             if (!playerName) {
@@ -51,28 +41,31 @@ document.addEventListener('DOMContentLoaded', () => {
         if (new Set(guess).size !== guess.length) {
             return (feedback.textContent = 'No duplicate digits allowed.');
         }
+        if (previousGuesses.includes(guess)) {
+            feedback.textContent = 'You already tried this number. Enter a new guess.';//Repated number is updated
+            return;
+        }
         
         attempts++;
         previousGuesses.push(guess);
         const { cows, bulls } = calculateCowsAndBulls(guess, secretNumber);
+        console.log(guess,bulls,cows);
 
         if (bulls === 4) {
             feedback.textContent = `Congratulations, ${playerName}! You guessed the number ${secretNumber} correctly in ${attempts} attempts!`;
-            submitButton.disabled = true; // Disable further input if the player wins
+            submitButton.disabled = true; 
             return;
         }
 
         feedback.textContent = `Attempt ${attempts}: You guessed ${guess} - ${bulls} Bulls, ${cows} Cows`;
-        updatePreviousGuesses();
+        updatePreviousGuesses(guess,bulls,cows);// mentioned the previous guesses lists
         guessInput.value = '';
     });
 
-    function updatePreviousGuesses() {
-        previousGuessesList.innerHTML = ''; // Clear existing list
-        previousGuesses.forEach((guess, index) => {
-            const listItem = document.createElement('li');
-            listItem.textContent = `Attempt ${index + 1}: ${guess}`;
-            previousGuessesList.appendChild(listItem);
+    function updatePreviousGuesses(guess,bulls,cows) {
+        const listItem = document.createElement('li');
+        listItem.textContent = `Attempt ${attempts}: ${guess} - ${bulls} Bulls, ${cows} Cows`; //Updated here to display bulls cows in list
+        previousGuessesList.appendChild(listItem);
         });
     }
     function calculateCowsAndBulls(guess, secret) {
@@ -84,13 +77,13 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let i = 0; i < 4; i++) {
             if (guessArr[i] === secretArr[i]) {
                 bulls++;
-                guessArr[i] = secretArr[i] = null; // Mark matched digits
+                guessArr[i] = secretArr[i] = null;
             }
         }
         for (let i = 0; i < 4; i++) {
             if (guessArr[i] !== null && secretArr.includes(guessArr[i])) {
                 cows++;
-                secretArr[secretArr.indexOf(guessArr[i])] = null; // Mark matched digit
+                secretArr[secretArr.indexOf(guessArr[i])] = null;
             }
         }
         return { cows, bulls };

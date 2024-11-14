@@ -8,7 +8,6 @@ function generateSecretNumber() {
     }
     return digits.join('');
 }
-
 const secretNumber = generateSecretNumber();
 console.log('Secret Number: ${SecretNumber}');
 let playerName = '';

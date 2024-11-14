@@ -66,7 +66,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const listItem = document.createElement('li');
         listItem.textContent = `Attempt ${attempts}: ${guess} - ${bulls} Bulls, ${cows} Cows`; //Updated here to display bulls cows in list
         previousGuessesList.appendChild(listItem);
-        });
     }
     function calculateCowsAndBulls(guess, secret) {
         let bulls = 0;
